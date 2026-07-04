@@ -1,38 +1,40 @@
 /*
  * Sieve of Eratosthenes
- * Given a number N, calculate the prime numbers up to N using Sieve of Eratosthenes.  
+ * Given a number N, calculate the prime numbers up to N using Sieve of Eratosthenes. 
+ * time  complexity =0(n) + 0(nlog(logn)) 
  */
 
 import java.util.*;
 class FindPrime{
     public static int countPrimes(int n) {
 
-        ///create a n size sieve of eratosthenes to store
-        //which is prime and which is not
-        int sieve[] = new int[n];
+        //create a  boolean  prime of  n  
+        boolean prime[] = new boolean[n];
+        //mark  it true at  starting considered all numbers are prime
+        Arrays.fill(prime,true);
 
-        int countp = 0;
-        //traverse from 2 to upto n
-        //0,1 not considered as prime no start from 2
+        
+        int count=0;
+        //travere from 2 to  sqrt of n for a prime after that if  any  number which is  not prime already marked  it  false
+        for(int i=2;i*i<n;i++)
+        {
+            //it it is prime 
+            if(prime[i]==true)
+            {
+                //go from i*i to  n multiply of i  not start from  2 it already marked false start from i
+               for(int j=i*i;j<n;j+=i)
+                prime[j]=false; //mark  it false not prime
+            }
+        }
+
+        //traverse from 2 to n count no  of prime
         for(int i=2;i<n;i++)
         {
-            //check value of sieve if it still 0 means if it not updated before and it is prime no
-            if(sieve[i]==0)
-            {
-                //increment count
-                countp++;
-
-                //all numbers which is multiplication of current numbers must be not prime 
-                for(int j=i+i;j<n;j+=i)
-                //make it as -1
-                sieve[j] = -1;
-
-            }
-
+            if(prime[i]==true)
+            count++;
         }
-        
-        //return count of prime numbers upto n
-        return countp;
+        //return count
+        return count;
     }
 
     public static void main(String args[])
@@ -40,7 +42,7 @@ class FindPrime{
         Scanner sc =  new Scanner(System.in);
         System.out.println("Enter a number to get how many prime no till n");
         int n  = sc.nextInt();
-
+        sc.close();
         int total = countPrimes(n);
         System.out.println("Total prime numbers till n is " + total);
 
